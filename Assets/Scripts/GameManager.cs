@@ -8,6 +8,8 @@ public class GameManager : MonoBehaviour
 {
 
    public static GameManager instance;
+   public int score = 0; 
+   public int record = 0; 
 
    [SerializeField]
    private GameObject[] players;
@@ -19,6 +21,7 @@ public class GameManager : MonoBehaviour
 
     public void Awake()
     {
+
      if (instance == null) {
         instance = this;
         DontDestroyOnLoad(gameObject);
@@ -44,4 +47,12 @@ public class GameManager : MonoBehaviour
             Instantiate(players[CharIndex]);
         }
     }
+     public void AddScore(int points) {
+        score += points;
+    }
+
+     public void RestartScore() {
+        score = 0;
+    }
+
 }

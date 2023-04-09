@@ -5,10 +5,10 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public float moveForce = 10f;
-    public float jumpForce = 11f;
+    public float jumpForce = 6f;
 
     private float movementX;
-
+    public GameObject restartButton;
     private Rigidbody2D myBody;
     private Animator anim;
     private SpriteRenderer sr;
@@ -16,8 +16,12 @@ public class Player : MonoBehaviour
     public string JUMP_ANIMATION = "jump";
     public string GROUND_TAG = "Ground";
     public string ENEMY_TAG = "Enemy";
+    public string STAR_TAG = "Star";
+    public string COIN_TAG = "Coin";
+
+
     public bool canMove = true; 
-    
+
     public void SetCanMove(bool canMove) {
     this.canMove = canMove;
 }
@@ -30,17 +34,24 @@ public class Player : MonoBehaviour
         sr = GetComponent<SpriteRenderer>();
     }
 
-    void Start()
-    {
-        
-    }
+    void Start() {
+    restartButton = GameObject.Find("restartButton");
+    restartButton.SetActive(false);
+    //transform.Translate(2,2,0);
+}
+
 
     void Update() 
     {
         PlayerMoveKeyboard();
         AnimatePlayer();
-        PlayerJump();
-        
+        PlayerJump();   
+
+    if (transform.position.y < -10) {
+        Destroy(gameObject);
+        restartButton.SetActive(true);
+
+    }
     }
 
 
@@ -83,12 +94,13 @@ public class Player : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D Collision) {
         if(Collision.gameObject.CompareTag(GROUND_TAG)) {
             isGrounded = true;
-                        anim.SetBool(JUMP_ANIMATION,false);
+            anim.SetBool(JUMP_ANIMATION,false);
 
         }
 
         if(Collision.gameObject.CompareTag(ENEMY_TAG)) {
             Destroy(gameObject);
+            restartButton.SetActive(true);
         }
     }
 
@@ -96,6 +108,16 @@ public class Player : MonoBehaviour
      
         if(Collision.gameObject.CompareTag(ENEMY_TAG)) {
             Destroy(gameObject);
+        
+            restartButton.SetActive(true);
+        }
+         if(Collision.gameObject.CompareTag(STAR_TAG)) {
+            Destroy(Collision.gameObject);
+            GameManager.instance.AddScore(2); 
+        }
+         if(Collision.gameObject.CompareTag(COIN_TAG)) {
+            Destroy(Collision.gameObject);
+            GameManager.instance.AddScore(1); 
         }
     }
 

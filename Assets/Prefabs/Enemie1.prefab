@@ -159,3 +159,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 0
+  isFacingRight: 0
+  jumpForce: 0
+  hitAWall: 0
